@@ -1,0 +1,971 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Legends | Soccer Hall of Fame</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --green: #39ff88;
+  --dark: #050a08;
+  --panel: rgba(9,22,16,.91);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: none;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ANIMATED STADIUM BACKGROUND */
+.stadium {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background:
+    linear-gradient(#0009, #000d),
+    url("https://media.giphy.com/media/3o7TKVUn7iM8FMEU24/giphy.gif")
+    center/cover no-repeat;
+  animation: stadiumZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes stadiumZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 15% 25%, #16ff7025, transparent 40%),
+    radial-gradient(ellipse at 85% 65%, #00ff9d18, transparent 42%);
+  animation: glowMove 7s ease-in-out infinite alternate;
+}
+
+@keyframes glowMove {
+  from { opacity: .4; }
+  to { opacity: 1; }
+}
+
+/* FOOTBALL CURSOR */
+#ballCursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  font-size: 27px;
+  filter: drop-shadow(0 0 9px var(--green));
+  transform: translate(-50%,-50%);
+}
+
+.trail {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  box-shadow: 0 0 12px var(--green);
+}
+
+/* NAVIGATION */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 6%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #000000c9;
+  border-bottom: 1px solid #39ff8840;
+  backdrop-filter: blur(15px);
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--green);
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 17px;
+  justify-content: flex-end;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 11px;
+  transition: .3s;
+}
+
+nav a:hover { color: var(--green); }
+
+/* HERO */
+.hero {
+  min-height: 88vh;
+  padding: 90px 8%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.tag {
+  color: var(--green);
+  letter-spacing: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  animation: fadeUp 1s both;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(43px, 8vw, 100px);
+  line-height: 1.08;
+  font-weight: 900;
+  animation: fadeUp 1s .15s both;
+}
+
+h1 span {
+  color: var(--green);
+  text-shadow: 0 0 30px #39ff8840;
+}
+
+.hero p {
+  max-width: 570px;
+  margin-top: 25px;
+  line-height: 1.9;
+  color: #c7d3cb;
+  font-size: 14px;
+  animation: fadeUp 1s .3s both;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 32px;
+  animation: fadeUp 1s .45s both;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 23px;
+  border: 1px solid var(--green);
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.primary {
+  background: var(--green);
+  color: #000;
+}
+
+.secondary { color: white; }
+
+.btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px #39ff8855;
+}
+
+.hero-ball {
+  position: absolute;
+  right: 10%;
+  top: 28%;
+  font-size: clamp(100px, 16vw, 210px);
+  filter: drop-shadow(0 0 35px #39ff8840);
+  animation: floatBall 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes floatBall {
+  0%,100% { transform: translateY(0) rotate(-12deg); }
+  50% { transform: translateY(-28px) rotate(15deg); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* COMMON SECTIONS */
+section.content {
+  padding: 80px 7%;
+  scroll-margin-top: 90px;
+}
+
+.section-head { margin-bottom: 35px; }
+
+.section-head small {
+  color: var(--green);
+  letter-spacing: 4px;
+  font-size: 11px;
+}
+
+.section-head h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(26px, 4vw, 42px);
+  margin-top: 10px;
+}
+
+.section-head p {
+  color: #aab7ae;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 10px;
+}
+
+/* LEGEND PLAYER CARDS */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 24px;
+}
+
+.player-card {
+  background: var(--panel);
+  border: 1px solid #39ff8824;
+  overflow: hidden;
+  transition: .4s;
+  animation: fadeUp .8s both;
+}
+
+.player-card:hover {
+  transform: translateY(-9px);
+  border-color: var(--green);
+  box-shadow: 0 12px 40px #00ff6620;
+}
+
+.player-image {
+  height: 230px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg,#183c29,#07110b);
+}
+
+.player-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s;
+}
+
+.player-card:hover .player-image img {
+  transform: scale(1.08);
+}
+
+.player-image::after {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(transparent,#07110b);
+  pointer-events: none;
+}
+
+.player-number {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  z-index: 2;
+  color: var(--green);
+  font-family: 'Orbitron',sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.player-info { padding: 22px; }
+
+.player-info h3 {
+  font-family: 'Orbitron',sans-serif;
+  font-size: 18px;
+}
+
+.position {
+  display: inline-block;
+  margin: 12px 0;
+  padding: 5px 9px;
+  background: #39ff8818;
+  color: var(--green);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.player-info p {
+  font-size: 12px;
+  color: #bac6bd;
+  line-height: 1.9;
+}
+
+.details-btn {
+  background: transparent;
+  color: var(--green);
+  border: 0;
+  margin-top: 18px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ACHIEVEMENT STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 18px;
+}
+
+.stat {
+  padding: 28px 15px;
+  text-align: center;
+  background: #06140cdb;
+  border: 1px solid #39ff8830;
+  transition: .3s;
+}
+
+.stat:hover { transform: scale(1.04); }
+
+.stat strong {
+  display: block;
+  font-family: 'Orbitron',sans-serif;
+  color: var(--green);
+  font-size: clamp(22px,4vw,36px);
+}
+
+.stat span {
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #bac6bd;
+  line-height: 1.7;
+}
+
+/* SOCCER RULES */
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 20px;
+}
+
+.rule-card {
+  position: relative;
+  padding: 25px;
+  background: rgba(5,20,12,.92);
+  border: 1px solid #39ff8835;
+  overflow: hidden;
+  transition: transform .35s,border-color .35s,box-shadow .35s;
+  animation: fadeUp .8s both;
+}
+
+.rule-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s;
+}
+
+.rule-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--green);
+  box-shadow: 0 10px 35px #39ff8825;
+}
+
+.rule-card:hover::before { transform: scaleX(1); }
+
+.rule-icon {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.rule-card h3 {
+  font-family: 'Orbitron',sans-serif;
+  font-size: 15px;
+  color: var(--green);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.rule-card p {
+  color: #c0cdc4;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.rules-note {
+  margin-top: 28px;
+  padding: 20px;
+  border-left: 3px solid var(--green);
+  background: #39ff880d;
+  color: #d3ded6;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+/* FOOTBALL HISTORY TIMELINE */
+.timeline {
+  border-left: 2px solid var(--green);
+  margin-left: 10px;
+  padding-left: 28px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green);
+  left: -35px;
+  top: 5px;
+  box-shadow: 0 0 15px var(--green);
+}
+
+.timeline-item h3 {
+  font-family: 'Orbitron',sans-serif;
+  font-size: 16px;
+}
+
+.timeline-item p {
+  color: #bdc8c0;
+  font-size: 13px;
+  line-height: 1.9;
+  margin-top: 7px;
+}
+
+/* PROFILE POPUP */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #000d;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-box {
+  max-width: 480px;
+  width: 100%;
+  background: #07140c;
+  border: 1px solid var(--green);
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 0 45px #39ff8830;
+  animation: fadeUp .3s both;
+}
+
+.modal-box h2 {
+  font-family: 'Orbitron',sans-serif;
+  margin: 18px 0;
+  font-size: 22px;
+}
+
+.modal-box p {
+  color: #c6d4ca;
+  line-height: 1.9;
+  font-size: 14px;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  background: none;
+  color: var(--green);
+  border: 0;
+  font-size: 27px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 35px 15px;
+  background: #020503ef;
+  border-top: 1px solid #39ff8830;
+  color: #aab7ae;
+  font-size: 12px;
+  line-height: 2;
+}
+
+footer span { color: var(--green); }
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+  .player-grid,.rules-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .hero-ball { opacity: .22; right: 5%; top: 18%; }
+}
+
+@media(max-width: 600px) {
+  * { scroll-margin-top: 120px; }
+
+  nav {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 16px 5%;
+  }
+
+  .menu { justify-content: flex-start; gap: 13px; }
+
+  .menu a { font-size: 10px; }
+
+  .player-grid,.rules-grid,.stats {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: 75vh;
+    padding: 70px 6%;
+  }
+
+  section.content { padding: 60px 5%; }
+  .player-image { height: 260px; }
+}
+
+@media(pointer: coarse) {
+  *,*::before,*::after { cursor: auto; }
+  #ballCursor,.trail { display: none; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stadium"></div>
+<div class="ambient"></div>
+<div id="ballCursor">⚽</div>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="logo">⚽ LEGENDS</div>
+  <div class="menu">
+    <a href="#home">HOME</a>
+    <a href="#players">PLAYERS</a>
+    <a href="#records">RECORDS</a>
+    <a href="#rules">SOCCER RULES</a>
+    <a href="#history">HISTORY</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="home">
+  <div class="hero-ball">⚽</div>
+  <div class="tag">THE BEAUTIFUL GAME</div>
+
+  <h1>FOOTBALL<br><span>LEGENDS.</span></h1>
+
+  <p>
+    Celebrate the greatest soccer players to ever grace the pitch.
+    Discover legendary careers, iconic achievements, unforgettable
+    moments and the rules of the beautiful game.
+  </p>
+
+  <div class="buttons">
+    <a href="#players" class="btn primary">EXPLORE LEGENDS ↗</a>
+    <a href="#rules" class="btn secondary">LEARN SOCCER RULES</a>
+  </div>
+</header>
+
+<!-- PLAYERS -->
+<section class="content" id="players">
+  <div class="section-head">
+    <small>HALL OF FAME</small>
+    <h2>THE IMMORTALS</h2>
+    <p>Icons whose names will forever live in football history.</p>
+  </div>
+
+  <div class="player-grid">
+
+    <article class="player-card">
+      <div class="player-image">
+        <img loading="lazy"
+        src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=900&q=80"
+        alt="Football stadium">
+        <span class="player-number">10</span>
+      </div>
+      <div class="player-info">
+        <h3>Lionel Messi</h3>
+        <span class="position">FORWARD · ARGENTINA</span>
+        <p>World Cup champion in 2022 and an eight-time Ballon d'Or winner, celebrated for incredible dribbling, vision and creativity.</p>
+        <button class="details-btn" onclick="showDetails('Lionel Messi','Argentina captain, 2022 FIFA World Cup winner and eight-time Ballon d’Or recipient. Famous for his dribbling, passing and finishing.')">VIEW PROFILE ↗</button>
+      </div>
+    </article>
+
+    <article class="player-card">
+      <div class="player-image">
+        <img loading="lazy"
+        src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=900&q=80"
+        alt="Football pitch">
+        <span class="player-number">7</span>
+      </div>
+      <div class="player-info">
+        <h3>Cristiano Ronaldo</h3>
+        <span class="position">FORWARD · PORTUGAL</span>
+        <p>A legendary goalscorer known for athleticism, powerful finishing and a remarkable career at Europe's biggest clubs.</p>
+        <button class="details-btn" onclick="showDetails('Cristiano Ronaldo','Portugal captain and five-time Ballon d’Or winner. Known for scoring records, aerial ability and achievements with Manchester United and Real Madrid.')">VIEW PROFILE ↗</button>
+      </div>
+    </article>
+
+    <article class="player-card">
+      <div class="player-image">
+        <img loading="lazy"
+        src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=900&q=80"
+        alt="Football match">
+        <span class="player-number">10</span>
+      </div>
+      <div class="player-info">
+        <h3>Pelé</h3>
+        <span class="position">FORWARD · BRAZIL</span>
+        <p>The Brazilian icon who won three men's FIFA World Cups and helped make football a global phenomenon.</p>
+        <button class="details-btn" onclick="showDetails('Pelé','Brazilian football icon who won the World Cup in 1958, 1962 and 1970. Remembered for his finishing, creativity and global influence.')">VIEW PROFILE ↗</button>
+      </div>
+    </article>
+
+    <article class="player-card">
+      <div class="player-image">
+        <img loading="lazy"
+        src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?auto=format&fit=crop&w=900&q=80"
+        alt="Footballer playing">
+        <span class="player-number">10</span>
+      </div>
+      <div class="player-info">
+        <h3>Diego Maradona</h3>
+        <span class="position">MIDFIELDER · ARGENTINA</span>
+        <p>A gifted playmaker whose skill and leadership inspired Argentina's memorable 1986 World Cup triumph.</p>
+        <button class="details-btn" onclick="showDetails('Diego Maradona','Argentina legend and captain of the 1986 FIFA World Cup-winning team. Famous for extraordinary dribbling and creativity.')">VIEW PROFILE ↗</button>
+      </div>
+    </article>
+
+    <article class="player-card">
+      <div class="player-image">
+        <img loading="lazy"
+        src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=900&q=80"
+        alt="Football on the pitch">
+        <span class="player-number">9</span>
+      </div>
+      <div class="player-info">
+        <h3>Ronaldo Nazário</h3>
+        <span class="position">STRIKER · BRAZIL</span>
+        <p>One of the most feared strikers of his generation, celebrated for acceleration, dribbling and clinical finishing.</p>
+        <button class="details-btn" onclick="showDetails('Ronaldo Nazário','Brazilian striker and two-time Ballon d’Or winner. He won the FIFA World Cup in 1994 and 2002, starring in Brazil’s 2002 title run.')">VIEW PROFILE ↗</button>
+      </div>
+    </article>
+
+    <article class="player-card">
+      <div class="player-image">
+        <img loading="lazy"
+        src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=900&q=80"
+        alt="Football stadium">
+        <span class="player-number">5</span>
+      </div>
+      <div class="player-info">
+        <h3>Franz Beckenbauer</h3>
+        <span class="position">DEFENDER · GERMANY</span>
+        <p>Known as Der Kaiser, he revolutionised the sweeper role with intelligence, elegance and outstanding leadership.</p>
+        <button class="details-btn" onclick="showDetails('Franz Beckenbauer','German football great who captained West Germany to the 1974 World Cup and later coached the country to the 1990 title.')">VIEW PROFILE ↗</button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- RECORDS -->
+<section class="content" id="records">
+  <div class="section-head">
+    <small>LEGACY & GREATNESS</small>
+    <h2>HISTORIC ACHIEVEMENTS</h2>
+    <p>Some extraordinary achievements in football history.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong>3</strong>
+      <span>Pelé World Cup titles</span>
+    </div>
+    <div class="stat">
+      <strong>8</strong>
+      <span>Messi Ballon d'Or awards</span>
+    </div>
+    <div class="stat">
+      <strong>5</strong>
+      <span>Cristiano Ronaldo Ballon d'Or awards</span>
+    </div>
+    <div class="stat">
+      <strong>2</strong>
+      <span>Ronaldo Nazário Ballon d'Or awards</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOCCER RULES -->
+<section class="content" id="rules">
+  <div class="section-head">
+    <small>KNOW THE GAME</small>
+    <h2>⚽ RULES OF SOCCER</h2>
+    <p>Learn the rules that keep the beautiful game fair, exciting and competitive.</p>
+  </div>
+
+  <div class="rules-grid">
+
+    <article class="rule-card">
+      <div class="rule-icon">⏱️</div>
+      <h3>01. Match Duration</h3>
+      <p>A standard adult match lasts 90 minutes: two halves of 45 minutes. Half-time is normally up to 15 minutes. The referee allows for stoppages, and extra time may be played in some knockout matches.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">👥</div>
+      <h3>02. Players</h3>
+      <p>Each team can have up to 11 players on the field, including one goalkeeper. A match cannot start or continue if either team has fewer than seven players.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🥅</div>
+      <h3>03. Scoring a Goal</h3>
+      <p>The whole ball must cross the goal line between the posts and beneath the crossbar. The goal counts provided no offence has occurred. The team with more goals wins.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🚩</div>
+      <h3>04. Offside</h3>
+      <p>Being in an offside position alone is not an offence. At the moment a teammate plays or touches the ball, an attacker must be level with or behind the second-last opponent, or level with the ball, to avoid an offside position. An offence occurs if the attacker becomes actively involved in play from an offside position. There is no offside offence directly from a goal kick, throw-in or corner kick.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🟨</div>
+      <h3>05. Yellow Card</h3>
+      <p>A yellow card is a caution. It may be shown for unsporting behaviour, dissent or repeatedly breaking the rules. Two yellow cards in the same match result in a red card.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🟥</div>
+      <h3>06. Red Card</h3>
+      <p>A red card means a player or team official is sent off. Serious foul play, violent conduct and certain other offences can result in a red card. In standard association football, a sent-off player cannot be replaced.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🧤</div>
+      <h3>07. Goalkeeper</h3>
+      <p>Inside their own penalty area, a goalkeeper may handle the ball with their hands, subject to the Laws of the Game. They generally cannot handle a ball deliberately kicked to them by a teammate or received directly from a teammate's throw-in.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🦵</div>
+      <h3>08. Fouls & Free Kicks</h3>
+      <p>Tripping, pushing, holding or tackling an opponent carelessly, recklessly or with excessive force can result in a foul. Depending on the offence, the referee awards a direct or indirect free kick, or a penalty kick.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🎯</div>
+      <h3>09. Penalty Kick</h3>
+      <p>A penalty is awarded for certain direct-free-kick offences committed by a defending player inside their own penalty area. The kick is taken from the penalty mark, 11 metres from the goal line.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">↩️</div>
+      <h3>10. Throw-In</h3>
+      <p>When the whole ball crosses a touchline, the opponents of the player who last touched it take a throw-in. The thrower uses both hands to deliver the ball from behind and over the head, following the required foot-position rules.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🚩</div>
+      <h3>11. Corner Kick</h3>
+      <p>A corner kick is awarded when the whole ball crosses the goal line, last touched by a defending player, without a goal being scored. The attacking team takes the kick from the appropriate corner area.</p>
+    </article>
+
+    <article class="rule-card">
+      <div class="rule-icon">🧑‍⚖️</div>
+      <h3>12. The Referee</h3>
+      <p>The referee enforces the Laws of the Game, manages disciplinary action, controls restarts and keeps track of match time. Players must respect the referee's decisions during the match.</p>
+    </article>
+
+  </div>
+
+  <div class="rules-note">
+    <strong style="color:#39ff88;">⚽ REMEMBER:</strong>
+    These are summaries of the standard Laws of Association Football.
+    Competition regulations may vary, and the referee applies the Laws during the match.
+  </div>
+</section>
+
+<!-- FOOTBALL HISTORY -->
+<section class="content" id="history">
+  <div class="section-head">
+    <small>THE JOURNEY</small>
+    <h2>MOMENTS THAT MADE HISTORY</h2>
+    <p>Different eras. Different heroes. One beautiful game.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <h3>1958 — Pelé Arrives</h3>
+      <p>At just 17, Pelé helped Brazil win the World Cup and announced himself on the world stage.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>1986 — Maradona's Masterpiece</h3>
+      <p>Maradona inspired Argentina to World Cup glory with one of the most celebrated individual tournaments in history.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2002 — Brazil's Golden Five</h3>
+      <p>Ronaldo led Brazil's attack as the Seleção won their fifth men's FIFA World Cup.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2022 — Messi Completes the Dream</h3>
+      <p>Argentina won the World Cup in Qatar, giving Messi the biggest international trophy of his career.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>MADE FOR THE LOVE OF <span>FOOTBALL ⚽</span></p>
+  <p>A fan-made tribute to the legends of soccer.</p>
+</footer>
+
+<!-- INTERACTIVE PLAYER PROFILE POPUP -->
+<div class="modal" id="profileModal">
+  <div class="modal-box">
+    <button class="close-btn" onclick="closeDetails()" aria-label="Close profile">×</button>
+    <small style="color:#39ff88;letter-spacing:3px">LEGEND PROFILE</small>
+    <h2 id="modalName"></h2>
+    <p id="modalText"></p>
+    <button class="btn primary" style="margin-top:24px" onclick="closeDetails()">BACK TO THE GAME</button>
+  </div>
+</div>
+
+<script>
+// SMOOTH FOOTBALL CURSOR
+const ball = document.getElementById('ballCursor');
+
+let mouseX = innerWidth / 2;
+let mouseY = innerHeight / 2;
+let ballX = mouseX;
+let ballY = mouseY;
+let lastTrail = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  const now = performance.now();
+
+  if (now - lastTrail > 65) {
+    const dot = document.createElement('div');
+    dot.className = 'trail';
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+
+    document.body.appendChild(dot);
+    setTimeout(() => dot.remove(), 450);
+
+    lastTrail = now;
+  }
+});
+
+function animateCursor() {
+  ballX += (mouseX - ballX) * .25;
+  ballY += (mouseY - ballY) * .25;
+
+  ball.style.left = ballX + 'px';
+  ball.style.top = ballY + 'px';
+
+  requestAnimationFrame(animateCursor);
+}
+
+animateCursor();
+
+// PLAYER PROFILE POPUPS
+function showDetails(name, text) {
+  document.getElementById('modalName').textContent = name;
+  document.getElementById('modalText').textContent = text;
+  document.getElementById('profileModal').style.display = 'flex';
+}
+
+function closeDetails() {
+  document.getElementById('profileModal').style.display = 'none';
+}
+
+document.getElementById('profileModal').addEventListener('click', e => {
+  if (e.target.id === 'profileModal') closeDetails();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDetails();
+});
+
+// REVEAL CARDS WHEN THEY ENTER THE SCREEN
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: .1 });
+
+  document.querySelectorAll('.player-card,.rule-card,.stat,.timeline-item')
+    .forEach(el => observer.observe(el));
+}
+</script>
+
+</body>
+</html>
